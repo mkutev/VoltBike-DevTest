@@ -1,0 +1,1 @@
+/var/www/html/app/code/Magehit/Storepickup/view/frontend/web/js/model/checkout-data-resolver.js

@@ -1,0 +1,611 @@
+<?php
+/**
+ * @var $block \Magehit\Storelocator\Block\Search
+ */
+?>
+<?php
+     if($block->isEnable()):
+ ?>
+
+
+<style>
+    #location .item{
+        margin: 3px;
+    }
+    #location .item img{
+        display: block;
+        width: 100%;
+        height: auto;
+    }
+</style>
+
+<div class="storelocator-search">
+    <form id="frm-storelocator-search">
+        <header class="header-search-stl">
+            <div class="left-search-slt">
+                <select  class="chose-search-slt">
+                    <option selected="selected" value="location"><?= __('Location')?></option>
+                    <option value="product"><?= __('Product')?></option>
+                </select>
+                <div class="gr-search-slt">
+                <input type="text" name="address"  placeholder="<?= __('Please enter a location')?>" id="address" />
+                <label id="getbylocal" style="cursor: pointer;"><?= __('Find my location')?></label>
+                </div>
+                <input type="text" class="search-slt input" placeholder="Name, Sku, Id" name="product_search" id="product_search" style="display: none;">
+            </div>
+            <div class="right-search-slt">
+                <div class="input-slt">
+                   <div class="input-radius-slt">
+                        <div class="hidden-sm hidden-xs label-radius">
+                                <label><?= ('Radius')?></label>
+                        </div>
+                        <div class="range-radius">
+                                <input id="radius_search" type="range" name="points" min="1" max="<?= $block->getHelper()->getMaxradius();?>" value="50">
+                        </div>
+                        <div class="radius-value-container" style="padding: 0px;">
+                                <div id="radius-value"><span class="num-range">50</span> <?php echo $block->getRadiusUnit() ?></div>
+                        </div>
+                   </div>
+                   <div class="input-attribute-slt" style="display: none;">
+                    <select id="typeSelect" class="select ">
+                        <option value="id" selected=""><?= __('Id')?></option> 
+                        <option value="sku"><?= __('Sku') ?></option> 
+                        <option value="name"><?= __('Name') ?></option> 
+                     </select>
+                   </div>
+                   <div class="search-type">
+                            <button id="reset-search" class="button btn primary reset" title="Reset">
+                                <span><?= __('Reset') ?></span>
+                            </button>
+                            <button id="submit-search" class="button btn primary submit" title="Search">
+                                <span><?= __('Search') ?></span>
+                            </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <content class="content-search-slt">
+            <div class="map_container top search-map">
+                <div id="map" style="height: 400px"></div>
+            </div>
+            <p class="loader" id="loading_mask_loader" style="display:none">
+                <img src="<?php echo $block->getViewFileUrl('Magehit_Storelocator::images/ajax-loader-tr.gif'); ?>" alt="<?php echo __('Loading...') ?>"/>
+                <br/>
+                <?php echo __('Please wait...') ?>
+            </p>
+            <div id="results-slt" class="results-slt" style="display:none">
+                <?php $list= $block->getlistStore()->getData();
+                    $count = count($list);
+                ?>
+                <div class="title"><?= __('Store list (<span id="num-rs">0</span> result)') ?></div>
+
+                <div class="content-results-slt"  id="location">
+                </div>
+            </div>
+            
+        </content>
+    </form>
+    <br/>
+    <div class="button" style="margin:20px 0 0 0;float: left;clear: left;"><a class="action primary tocart"  href="/storelocator/index/signup/">Sign up and become Ambassador</a></div>
+</div>
+
+
+<script type="text/javascript">
+
+require([
+        "jquery"
+        ], function ($){
+
+    $('#radius_search').on("change mousemove", function() {
+        $('#radius-value .num-range').html($(this).val());
+    });
+    $('.chose-search-slt').on("change", function() {
+        if($(this).val() == 'location'){
+            $('.input-radius-slt').show();
+            $('.gr-search-slt').show();
+            $('.input-attribute-slt').hide();
+            $('#product_search').hide();
+           
+        }else{
+            $('.input-radius-slt').hide();
+            $('.input-attribute-slt').show();
+            $('.gr-search-slt').hide();;
+            $('#product_search').show();
+            
+        }
+    });
+
+})
+</script>
+<script sync defer type="text/javascript"
+        src="https://maps.googleapis.com/maps/api/js?libraries=places&key=<?= trim($block->getHelper()->getConfig('map/api_key'))?>">
+</script>
+<?php
+	//Get Object Manager Instance
+	$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+	$remoteAddress = $objectManager->get('Magento\Framework\HTTP\PhpEnvironment\RemoteAddress');
+	$ip = $remoteAddress->getRemoteAddress() ;//$_SERVER['REMOTE_ADDR'];
+	
+	//print_r('$ip :' . $ip);
+	$details = json_decode(file_get_contents("http://ipinfo.io/{$ip}/json"));
+	//print_r($details);
+	$addressByIP = false;
+	if(count($details)){
+		$addressByIP = $details->city . ' ' . $details->country;
+		//print_r('address :' . $addressByIP);
+	}
+ ?>
+<script type="text/javascript">
+require([
+        "jquery"
+        ], function ($){
+           var center_lat = '<?php echo $block->getCenterLat() ?>';
+           var center_lng = '<?php echo $block->getCenterLng() ?>';
+           var initial_zoom = <?php echo $block->getInitialZoom() ?>;
+           var baseurl = '<?php echo $block->getBaseUrl() ?>';
+           var currenturl = '<?php echo $block->getBaseUrl().'storelocator/index/index' ?>';
+           var search_result_zoom = <?php echo $block->getSearchResultZoom() ?>;
+           var map;
+           var markers = [];
+           var infoWindow;
+           var locationDiv;
+           var randomID;
+            if (typeof google == 'undefined') {
+                    location.reload();
+            }
+
+           google.maps.event.addDomListener(window, 'load',  loadMap(true));
+     
+        $('#frm-storelocator-search').submit(function(e){
+            e.preventDefault();
+
+            if($('.chose-search-slt').val() == 'location'){
+                searchLocation(false,false);
+               
+            }else{
+                searchStoresByProducts();
+                
+            }
+        
+        });
+        $('#frm-storelocator-search input').on('keydown', function(e) {
+            
+            if (e.which == 13) { 
+                e.preventDefault();
+                $( "#frm-storelocator-search" ).trigger( "submit" );
+            }
+        });
+    
+    $(document).on('click', '#reset-search', function(e){
+       e.preventDefault();
+       $('#address,#product_search').val('');
+       $('#radius_search').val(1);
+       loadMap(false);
+    });
+    $(window).load( function(){
+       $('.chose-search-slt').val('location');
+       $('.input-radius-slt').show();
+        $('.gr-search-slt').show();
+        $('.input-attribute-slt').hide();
+        $('#product_search').hide();
+    });
+    $(document).on('mouseover', '.inner-item', function(){
+        onMouseover($(this).parent().attr( "datamarker" ));
+    });
+    $(document).on('mouseout', '.inner-item', function(){
+        onMouseover($(this).parent().attr( "datamarker" ));
+    });
+    $(document).on('click', '.inner-item', function(){
+
+        num =$(this).parent().attr( "datamarker" );
+
+        google.maps.event.trigger(markers[num], 'click');
+    });
+    $(document).on('click', '#getbylocal', function(){
+       initMap();
+    });
+    function onMouseover(markerNum) {
+        markers[markerNum].setAnimation(google.maps.Animation.BOUNCE);
+        setTimeout(function(){ markers[markerNum].setAnimation(null); }, 750);
+    }
+    
+    function onMouseout(markerNum) {
+        markers[markerNum].setAnimation(null);
+    }
+    
+    function loadMap(runFindIp) {
+        //initMap();
+		
+        map = new google.maps.Map(document.getElementById("map"), {
+            center: new google.maps.LatLng(center_lat,center_lng),
+            zoom: initial_zoom,
+            mapTypeId: 'roadmap',
+            mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+        });     
+         infoWindow = new google.maps.InfoWindow();
+
+        locationDiv = document.getElementById("location");
+        input = document.getElementById('address');
+        clearLocations();
+		
+		
+		var addressByIp = '<?php echo $addressByIP ?>';
+		if(addressByIp && runFindIp){
+			searchLocation(addressByIp,true);
+			return;
+		}
+        var bounds = new google.maps.LatLngBounds();
+        var searchBox = new google.maps.places.SearchBox(input);
+        
+        var searchUrl = baseurl+'storelocator/index/search?all=1';
+        $.ajax({url: searchUrl,
+                type: "GET",
+                cache: false,
+                dataType: "xml",
+        }).done(function(xml) {
+
+            //var xml = parseXml(data);
+            var markerNodes = xml.documentElement.getElementsByTagName("marker");
+            if (markerNodes.length == 0) {
+                document.getElementById("loading_mask_loader").style.display = 'none';
+                // document.getElementById("results-slt").style.display = 'none';
+                // var address = document.getElementById("address").value;
+                alert("There is no store");
+                return;
+            }
+                document.getElementById("results-slt").style.display = 'block';
+                var thum = '';
+                document.getElementById("num-rs").innerHTML = markerNodes.length;
+            for (var i = 0; i < markerNodes.length; i++) {
+                if(typeof markerNodes[i].getAttribute("thumnail") !== 'undefined'){
+                        thum =markerNodes[i].getAttribute("thumnail");
+                }
+                var id = markerNodes[i].getAttribute("id");
+                var name = markerNodes[i].getAttribute("name");
+                var url = markerNodes[i].getAttribute("url");
+                var address = markerNodes[i].getAttribute("address");
+                var phone = markerNodes[i].getAttribute("phone");
+                var distance = parseFloat(markerNodes[i].getAttribute("distance"));
+                var latlng = new google.maps.LatLng(
+                    parseFloat(markerNodes[i].getAttribute("lat")),
+                    parseFloat(markerNodes[i].getAttribute("lng")));
+
+                listItem(thum,id, name,url, address,phone, distance, i-1);
+
+                createMarker(latlng, name,thum, address,phone, i,url);
+                bounds.extend(latlng);
+            }
+
+            map.fitBounds(bounds);
+            var zoom = map.getZoom();
+            zoom = Math.min(zoom, 12);
+            map.setZoom(zoom);
+
+            document.getElementById("loading_mask_loader").style.display = 'none';
+            $("#"+randomID).owlCarousel({
+                        autoPlay: 3000, //Set AutoPlay to 3 seconds
+                        items : 3,
+                        navigation : true,
+                        pagination : false,
+                        navigationText : ["<", ">"],
+                    });
+        });
+    }
+
+    function initMap() {
+
+      // Try HTML5 geolocation.
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+            var geocoder = new google.maps.Geocoder();
+            var latlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+
+            geocoder.geocode({'latLng': latlng}, function(results, status) {
+                if (status == google.maps.GeocoderStatus.OK) {
+                    if (results[1]) {
+                        document.getElementById('address').value = results[1].formatted_address;
+						/* $('#submit-search').trigger('click'); */
+                    } else {
+                        alert('No results found');
+                    }
+                } else {
+                    alert('Geocoder failed due to: ' + status);
+                }
+            }.bind(this));
+
+           // document.getElementById("latitude").value = position.coords.latitude;
+//            document.getElementById("longitude").value = position.coords.longitude;
+}.bind(this), function(error) {
+}.bind(this));
+    }
+}
+function guRandomid() {
+      function s4() {
+        return Math.floor((1 + Math.random()) * 0x10000)
+          .toString(16)
+          .substring(1);
+      }
+      return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
+}
+function searchLocation(addressByIp,runFindIp) {
+        
+    document.getElementById("loading_mask_loader").style.display = '';
+    
+    var address = addressByIp ? addressByIp : document.getElementById("address").value;
+    var radius_search = document.getElementById("radius_search").value;
+    if(address == '' || address == null){
+        alert('Please enter a location.');
+        document.getElementById("loading_mask_loader").style.display = 'none';
+        return false;        
+    }
+    if(radius_search == '' || radius_search == null){
+        alert('Please enter a radius.');
+        document.getElementById("loading_mask_loader").style.display = 'none';
+        return false;        
+    }
+	if(!addressByIp){
+		clearLocations();
+	}
+    var geocoder = new google.maps.Geocoder();
+	
+	console.log(address);
+    geocoder.geocode({address: address}, function(results, status) {	
+        if (status == google.maps.GeocoderStatus.OK) {            
+            var latlng = new google.maps.LatLng(results[0].geometry.location.lat(), results[0].geometry.location.lng());
+            var marker = new google.maps.Marker({
+                map: map,
+                position: latlng,
+                icon: 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|6fba33' 
+            });
+            markers.push(marker);
+			
+            searchLocationsNear(results[0].geometry.location,runFindIp);
+        } else {
+            document.getElementById("loading_mask_loader").style.display = 'none';
+            map.setZoom(initial_zoom);                
+            alert(address + ' is not found'); 
+        }
+
+    });
+}
+
+function searchStoresByProducts(){
+    
+    var bounds = new google.maps.LatLngBounds();
+    document.getElementById("loading_mask_loader").style.display = '';
+    var search_text = document.getElementById("product_search").value;
+    var search_type = document.getElementById("typeSelect").value;
+    if(search_text == '' || search_text == null){
+        alert('Please enter a name or sku or id.');
+        document.getElementById("loading_mask_loader").style.display = 'none';
+        return false;        
+    }else{
+        clearLocations();
+        var searchUrl = baseurl+'storelocator/index/searchproduct?search_text=' + search_text + '&search_type='+search_type;
+        downloadUrl(searchUrl, function(data) {
+            var xml = parseXml(data);
+            var markerNodes = xml.documentElement.getElementsByTagName("marker");
+            if (markerNodes.length == 0) {
+                document.getElementById("loading_mask_loader").style.display = 'none';
+                document.getElementById("results-slt").style.display = 'none';
+                var query_search = document.getElementById("product_search").value;
+                alert('There is no store contain product '+search_type+' is: ' + query_search);
+                return;
+            }           
+            document.getElementById("results-slt").style.display = 'block';
+            var thum = '';
+            document.getElementById("num-rs").innerHTML= markerNodes.length;
+            for (var i = 0; i < markerNodes.length; i++) {
+                var id = markerNodes[i].getAttribute("id");
+               if(typeof markerNodes[i].getAttribute("thumnail") !== 'undefined'){
+                    thum =markerNodes[i].getAttribute("thumnail");
+               }
+                var name = markerNodes[i].getAttribute("name");
+                var url = markerNodes[i].getAttribute("url");
+                var address = markerNodes[i].getAttribute("address");
+                var phone = markerNodes[i].getAttribute("phone");
+                var distance = parseFloat(markerNodes[i].getAttribute("distance"));
+
+                var latlng = new google.maps.LatLng(
+                    parseFloat(markerNodes[i].getAttribute("lat")),
+                    parseFloat(markerNodes[i].getAttribute("lng")));
+
+                listItem(thum,id, name,url,address,phone, "", i-1);
+                createMarker(latlng, name,thum, address,phone, i,url);
+                bounds.extend(latlng);
+            }
+
+            map.fitBounds(bounds);
+            var zoom = map.getZoom();
+            zoom = Math.min(zoom, 12);
+            map.setZoom(zoom);
+
+            document.getElementById("loading_mask_loader").style.display = 'none';
+            $("#"+randomID).owlCarousel({
+                    autoPlay: 3000, //Set AutoPlay to 3 seconds
+                    items : 3,
+                    navigation : true,
+                    itemsDesktop : [1199,3],
+                    itemsDesktopSmall : [979,3]
+                });
+        });   
+    }        
+    return true;
+}
+
+function clearLocations() {
+    infoWindow.close();
+    for (var i = 0; i < markers.length; i++) {
+        markers[i].setMap(null);
+    }
+    markers.length = 0;
+    randomID = guRandomid();
+    locationDiv.innerHTML = '<div id="'+randomID+'"></div>';
+}
+
+function searchLocationsNear(center,runFindIp) {
+    var bounds = new google.maps.LatLngBounds();
+    bounds.extend(center);
+    map.setCenter(new google.maps.LatLng(center.lat(), center.lng())); 
+    map.setZoom(search_result_zoom);
+
+    var radius = document.getElementById('radius_search').value;
+    var searchUrl = baseurl+'storelocator/index/search?lat=' + center.lat() + '&lng=' + center.lng() + '&radius=' + radius;
+    downloadUrl(searchUrl, function(data) {
+        var xml = parseXml(data);
+
+        var markerNodes = xml.documentElement.getElementsByTagName("marker");
+
+        if (markerNodes.length == 0) {
+			if(runFindIp){
+				loadMap(false);
+				return;
+			}
+            document.getElementById("loading_mask_loader").style.display = 'none';
+            document.getElementById("results-slt").style.display = 'none';
+            var address = document.getElementById("address").value;
+            alert("There is no store near with "+ address);
+            return;
+        }
+            document.getElementById("results-slt").style.display = 'block';
+            var thum = '';
+            document.getElementById("num-rs").innerHTML = markerNodes.length;
+        for (var i = 0; i < markerNodes.length; i++) {
+            if(typeof markerNodes[i].getAttribute("thumnail") !== 'undefined'){
+                    thum =markerNodes[i].getAttribute("thumnail");
+            }
+            var id = markerNodes[i].getAttribute("id");
+            var name = markerNodes[i].getAttribute("name");
+            var url = markerNodes[i].getAttribute("url");
+            var address = markerNodes[i].getAttribute("address");
+            var phone = markerNodes[i].getAttribute("phone");
+            var distance = parseFloat(markerNodes[i].getAttribute("distance"));
+            var latlng = new google.maps.LatLng(
+                parseFloat(markerNodes[i].getAttribute("lat")),
+                parseFloat(markerNodes[i].getAttribute("lng")));
+
+            listItem(thum,id, name,url, address,phone, distance, i);
+            createMarker(latlng, name,thum, address,phone, i,url);
+            bounds.extend(latlng);
+        }
+
+        map.fitBounds(bounds);
+        var zoom = map.getZoom();
+        zoom = Math.min(zoom, 12);
+        map.setZoom(zoom);
+
+        document.getElementById("loading_mask_loader").style.display = 'none';
+        $("#"+randomID).owlCarousel({
+                    autoPlay: 3000, //Set AutoPlay to 3 seconds
+                    items : 3,
+                    navigation : true,
+                    pagination : false,
+                    navigationText : ["<", ">"],
+                });
+    });
+}
+
+function createMarker(latlng, name,thum, address,phone, num,url) {
+   var html = '';
+   if(thum == null){
+            thum = '<?php echo $block->getViewFileUrl('Magehit_Storelocator::images/store.png'); ?>';
+    }
+	
+	var only_address = address.replace(/\d{1,9} /g, '');
+    html += '<div class="store-marker">';
+    html += '<div class="address-info"><table><tbody>';
+    html += '<tr><td colspan="4" align="left"><h4>'+name+'</h4></td></tr>';
+    html += '<tr><td rowspan="3"><img width="60" src="'+thum+'"></td></tr>';
+    html += '<tr><td><strong>Address:</strong></td><td><p>'+only_address+'</p></td></tr>';
+    if (phone.trim().length > 8) {
+      html += '<tr><td><strong>Phone no:</strong></td><td><p>'+phone+'</p></td></tr>';
+    }
+    html += '<tr><td><strong>  </strong></td><td><a style="display:block;background:#0051B9;color:#FFFFFF;padding:1px 3px" href="'+url+'">Contact this ambassador</a></td></tr>';
+    html += '</tbody></table></div>';
+    html += '</div>';
+
+    var marker = new google.maps.Marker({
+        map: map,
+        position: latlng,
+        icon: 'http://chart.apis.google.com/chart?chst=d_map_pin_letter_withshadow&chld=' + (num + 1) + '|FF0000|0000FF'  
+    });
+    google.maps.event.addListener(marker, 'click', function() {
+        infoWindow.setContent(html);
+        infoWindow.open(map, marker);
+    });
+    markers.push(marker);
+}
+
+function listItem(thum, id, name,url, address,phone, distance, num) {
+    num = num + 1;
+	
+	var only_address = address.replace(/\d{1,9} /g, '');
+    element = document.createElement("div");
+    if(typeof distance !== 'undefined'){
+        var att = document.createAttribute("datamarker");
+        att.value = num;
+        element.setAttributeNode(att);
+        
+            // att = document.createAttribute("onmouseout");
+            // att.value = "onMouseout(" + num + ")";
+            // element.setAttributeNode(att); 
+        }
+        var att = document.createAttribute('class');
+        att.value = "item";
+        element.setAttributeNode(att);
+        var html = '<div class="inner-item">'; 
+        if(thum != null){
+            html += '<div class="item-thumb"><img title="" src="'+thum+'"></div>';
+        }else{
+            html += '<div class="item-thumb"><img title="" src="'+'<?php echo $block->getViewFileUrl('Magehit_Storelocator::images/store.png'); ?>'+'"></div>';
+        }
+            html += '<div class="item-content"><h3>'+ name + '</h3>';
+            // element.innerHTML += '<div class="clear"></div>';
+            html += '<div class="address">' + only_address + '</div>';
+            //console.log(phone.trim().length);
+            if (phone.trim().length > 8) {
+                html += '<h3>'+ '<?= __('Phone Number')?>' + '</h3>';
+                html += '<div class="phone-no">'+ phone + '</div>';
+            }
+                html += '<a class="linkdetailstore" href="'+ url +'">Details and contact with store</a></div></div>';
+
+        html += '</div>';
+        element.innerHTML += html;
+        
+        document.getElementById(randomID).appendChild(element);
+    }
+
+    function downloadUrl(url, callback) {
+        var request = window.ActiveXObject ? new ActiveXObject('Microsoft.XMLHTTP') : new XMLHttpRequest;
+
+        request.onreadystatechange = function() {
+            if (request.readyState == 4) {
+                request.onreadystatechange = doNothing;
+                callback(request.responseText, request.status);
+            }
+        };
+
+        request.open('GET', url, true);
+        request.send(null);
+    }
+
+    function parseXml(str) {
+        if (window.ActiveXObject) {
+            var doc = new ActiveXObject('Microsoft.XMLDOM');
+            doc.loadXML(str);
+            return doc;
+        } else if (window.DOMParser) {
+            return (new DOMParser).parseFromString(str, 'text/xml');
+        }
+    }
+
+    function doNothing() {alert('123444');}
+
+
+   // });
+
+});
+</script>
+<?php
+   endif;
+?>

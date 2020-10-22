@@ -1,0 +1,10 @@
+<?php 
+$product = $block->getProduct();
+if($product):
+    $abstractProductBlock = $block->getLayout()->createBlock('\Magento\Catalog\Block\Product\AbstractProduct');
+    $price = $abstractProductBlock->getProductPrice($product);
+?>
+<span><?= $price; ?></span>
+<?php else: ?>
+    <?= __('Cannot load product'); ?>
+<?php endif; ?>

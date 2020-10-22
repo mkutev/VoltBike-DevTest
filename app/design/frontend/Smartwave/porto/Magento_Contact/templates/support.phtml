@@ -1,0 +1,353 @@
+<style>
+.support label{
+    font-size: 1.3em;
+    color: #000;
+    line-height: 2.5rem;
+    margin-bottom: 5px;
+    display: inline-block;
+}
+.support .form-group{
+    margin-bottom: 20px;
+}
+.support input, .support select{
+    height: 41px;
+}
+.support-title, .article-title{
+    font-size: 2em;
+    color: black;
+    font-weight: 500;
+    margin-bottom: 40px;
+}
+.support-label{
+    color: #666;
+    font-weight: 600;
+    font-size: 1.2em;
+    margin-bottom: 20px;
+}
+.support button.submit{
+    background-color: #3a56d1;
+    border-radius: 3px;
+    color: #fff;
+}
+.support button.discard, .support button.discard:hover{
+    background-color: #f9f9f9;
+    color: #333333;
+    border:1px solid #ccc;
+}
+.article-list{
+    list-style: none;
+    margin-left: -40px;
+}
+.article-list li.item{
+    font-size:1.1em;
+    padding:5px;
+}
+.article-list li.item a{
+    text-decoration: none;
+}
+@media (max-width: 768px){
+    .article-title{
+        margin-top: 50px;
+        margin-bottom: 20px;
+    }
+}
+.grecaptcha-badge{
+    width: 256px!important;
+    height: 60px!important;
+    box-shadow: grey 0px 0px 5px !important;
+    transition: unset !important;
+    position: absolute!important;
+    bottom: 0px!important;
+    left: 0px!important;
+    top: 0px;
+    right: 0px !important;;
+    display: inline-block !important;
+}
+.btn-form{
+    margin-top:100px;
+}
+#captcha{
+    position:relative;
+}
+
+.contact-us {
+font-size : 14px;
+line-height: 27px;
+}
+
+</style>
+<!-- <script src="https://www.google.com/recaptcha/api.js?render=6Lcqk9UUAAAAABYPUBFVS3QgyvTqgUbsLTpGpCVU" async defer></script> -->
+<script src="https://cdn.ckeditor.com/4.13.1/standard/ckeditor.js"></script>
+
+<div class="row">
+
+
+
+<div class="col-md-12">
+<div style="background-color: #f6f6d0; font-style: italic; padding: 16px;">
+
+<p style="font-size: 14px;">
+<b>COVID-19 Update:</b>
+ Our team is working around the clock to ensure we continue to provide essential services during the COVID-19 pandemic. But please be a little patient with us. We are a bit backlogged and not able to move as fast as normal. Emails & phone calls are not being answered quite as fast as you might be used to and our shipments are going out a bit slower than usual.</p>
+</div>
+
+<br /><br />
+
+</div>
+
+
+    <div class="col-md-8">
+        <div class="support-title">Submit a ticket</div>
+        <div class="support-label">Please enter details</div>
+        <form action="/customevent/support/send" method="post" class="support" enctype="multipart/form-data" id="support"  data-hasrequired="* Required Fields" novalidate="novalidate">
+            <div class="form-group">
+                <label for="classifications">Classifications <span style="color:red">*</span></label>
+                <select name="classifications" id="classifications" class="form-control">
+                    <option value="Sales Question">Sales Question</option>
+                    <option value="Warranty Request">Warranty Request</option>
+                    <option value="Tech Support Question">Tech Support Question</option>
+                    <option value="Change Order Request">Change Order Request</option>
+                    <option value="Existing Order Question">Existing Order Question</option>
+                </select>
+            </div>
+        <div class="form-group name">
+            <label for="contact_name">Contact Name <span style="color:red">*</span></label>
+            <input type="text" class="form-control" id="contact_name" name="contact_name" data-validate="{required:true}" aria-required="true" />
+            <br />
+            <span class="err_name"></span>
+        </div>
+        <div class="form-group email">
+            <label for="email">Email <span style="color:red">*</span></label>
+            <input type="email" class="form-control" id="email" name="email" aria-required="true" data-validate="{required:true, 'validate-email':true}">
+            <br />
+            <span class="err_email"></span>
+        </div>
+        <div class="form-group subject">
+            <label for="subject">Subject <span style="color:red">*</span></label>
+            <input type="text" class="form-control" id="subject" name="subject" aria-required="true" data-validate="{required:true}">
+            <br />
+            <span class="err_subject"></span>
+        </div>
+        <div class="form-group order_date" style="display:none">
+            <label for="order_date">Order Date</label>
+            <input type="text" class="form-control" id="order_date" name="order_date">
+        </div>
+        <div class="form-group order_number" style="display:none">
+            <label for="order_number">Order Number</label>
+            <input type="text" class="form-control" id="order_number" name="order_number">
+        </div>
+        <div class="form-group product" style="display:none">
+            <label for="product">Which VoltBike Product?</label>
+            <select name="product" id="product" class="form-control">
+                <option value="">-None-</option>
+                <option value="VoltBike Yukon 750">VoltBike Yukon 750</option>
+                <option value="VoltBike Mariner">VoltBike Mariner</option>
+                <option value="VoltBike Bravo">VoltBike Bravo</option>
+                <option value="VoltBike Elegant">VoltBike Elegant</option>
+                <option value="VoltBike Urban">VoltBike Urban</option>
+                <option value="VoltBike Kodiak">VoltBike Kodiak</option>
+                <option value="VoltBike Trio">VoltBike Trio</option>
+                <option value="">Not in the list</option>
+            </select>
+        </div>
+        <input type="hidden" id="token" name="token" />
+        <div class="form-group description">
+            <label for="description">Description</label>
+            <textarea rows="15" class="form-control ckeditor" id="description" name="description"></textarea>
+        </div>
+        <div class="form-group attach" style="display:none">
+            <label for="attachment">Attach a file</label>
+            <input type="file" name="attachment" id="attachment" />
+        </div>
+        <div id="captcha">
+            <?=$block->getChildHtml('form.additional.info')?>
+        </div>
+        <div class="btn-form">
+            <button type="submit" class="btn btn-success submit">Submit</button>
+            <button class="btn btn-default discard">Discard</button>
+        </div>
+        </form>
+    </div>
+
+    <div class="col-md-4">
+        <div class="article-title"><i class="fa fa-folder-open"></i> Support, Repairs and Service</div>
+        <?php
+            $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+
+            $collection = $objectManager->get('Mageplaza\Faqs\Block\Article\ArticleList');
+            $i = 0;
+                foreach ($collection->getCategoryCollection() as $category):
+                    if($category->getId() == 3):
+        ?>
+<ul class="article-list collapsible">
+                            <?php foreach ($articles = $collection->getArticleByCategory($category->getId()) as $article): $i++; ?>
+                                <li class="item" <?php if($i >= 8) echo 'style="display:none"'; ?>>
+                                    <div class="collapsible-header"
+                                         data-id="<?php echo $category->getId() . '-' . $article->getId() ?>">
+                                        <span>
+                                            <?php if ($collection->isCollapsible()): ?>
+                                                <i class="fa fa-file-text-o"></i>&nbsp;&nbsp;
+                                                <?php echo $article->getName(); ?>
+                                            <?php else: ?>
+                                                <a href="<?php echo $article->getUrl() ?>">
+                                                    <i class="fa fa-file-text-o"></i>&nbsp;&nbsp;
+                                                    <?php echo $article->getName(); ?>
+                                                </a>
+                                            <?php endif; ?>
+                                        </span>
+                                    </div>
+                                </li>
+                            <?php endforeach; ?>
+                            <div class="view-all-faq">
+                                 <a class="load-more"> <i class="fa fa-angle-double-down"></i> <?php echo __("View all"); ?></a>
+                                 <a class="collapse" style="display:none"> <i class="fa fa-angle-double-up"></i> <?php echo __("Collapse"); ?></a>
+                            </div>
+                        </ul>
+        <?php
+                    endif;
+                endforeach;
+        ?>
+
+<div class="article-title"><i class="fa fa-folder-open"></i> Before Your Order</div>
+        <?php
+            $i = 0;
+                foreach ($collection->getCategoryCollection() as $category):
+                    if($category->getId() == 1):
+        ?>
+<ul class="article-list collapsible">
+                            <?php foreach ($articles = $collection->getArticleByCategory($category->getId()) as $article): $i++; ?>
+                                <li class="item" <?php if($i >= 8) echo 'style="display:none"'; ?>>
+                                    <div class="collapsible-header"
+                                         data-id="<?php echo $category->getId() . '-' . $article->getId() ?>">
+                                        <span>
+                                            <?php if ($collection->isCollapsible()): ?>
+                                                <i class="fa fa-file-text-o"></i>&nbsp;&nbsp;
+                                                <?php echo $article->getName(); ?>
+                                            <?php else: ?>
+                                                <a href="<?php echo $article->getUrl() ?>">
+                                                    <i class="fa fa-file-text-o"></i>&nbsp;&nbsp;
+                                                    <?php echo $article->getName(); ?>
+                                                </a>
+                                            <?php endif; ?>
+                                        </span>
+                                    </div>
+                                </li>
+                            <?php endforeach; ?>
+                            <div class="view-all-faq">
+                                 <a class="load-more"> <i class="fa fa-angle-double-down"></i> <?php echo __("View all"); ?></a>
+                                 <a class="collapse" style="display:none"> <i class="fa fa-angle-double-up"></i> <?php echo __("Collapse"); ?></a>
+                            </div>
+                        </ul>
+        <?php
+                    endif;
+                endforeach;
+        ?>
+    </div>
+</div>
+<script type="text/x-magento-init">
+    {
+        "#support": {
+            "validation": {}
+        }
+    }
+</script>
+<script>
+    require(['jquery', 'mage/calendar'], function($){
+        // $('.submit').click(function(event){
+        //     event.preventDefault();
+        //     var check = true;
+        //     if(!$('#contact_name').val().trim()){
+        //         $('#contact_name').css('border-color','red');
+        //         $('.err_name').text('Contact name can not blank.');
+        //         check = false;
+        //     }else{
+        //         $('#contact_name').css('border-color','#ccc');
+        //         $('.err_name').text('');
+        //     }
+        //     if(!$('#email').val().trim()){
+        //         $('#email').css('border-color','red');
+        //         $('.err_email').text('Email can not blank.');
+        //         check = false;
+        //     }else{
+        //         $('#email').css('border-color','#ccc');
+        //         $('.err_email').text('');
+        //     }
+        //     if(!$('#subject').val().trim()){
+        //         $('#subject').css('border-color','red');
+        //         $('.err_subject').text('Subject can not blank.');
+        //         check = false;
+        //     }else{
+        //         $('#subject').css('border-color','#ccc');
+        //         $('.err_subject').text('');
+        //     }
+
+        //     if(check == true) $('#support').submit();
+        // })
+        $('.view-all-faq .load-more').click(function(){
+            $(this).hide();
+            $(this).parents('.view-all-faq').find('.collapse').show();
+            $(this).parents('.article-list').find('li.item').slideDown();
+        });
+
+        $('.view-all-faq .collapse').click(function(){
+            $(this).hide()
+            $(this).parents('.view-all-faq').find('.load-more').show();
+            $(this).parents('.article-list').find('li.item').each(function(i, item){
+                if(i > 7){
+                    $(item).slideUp();
+                }
+            });
+        });
+        $('#order_date').datepicker({
+ 
+            prevText: '&#x3c;zurück', prevStatus: '',
+            
+            prevJumpText: '&#x3c;&#x3c;', prevJumpStatus: '',
+            
+            nextText: 'Vor&#x3e;', nextStatus: '',
+            
+            nextJumpText: '&#x3e;&#x3e;', nextJumpStatus: '',
+            
+            monthNames: ['January','February','March','April','May','June',
+            
+            'July','August','September','October','November','December'],
+            
+            monthNamesShort: ['Jan','Feb','Mar','Apr','May','Jun',
+            
+            'Jul','Aug','Sep','Oct','Nov','Dec'],
+            
+            dayNames: ['Sunday ','Monday','Tuesday ','Wednesday','Thursday','Friday','Saturday'],
+            
+            dayNamesShort: ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],
+            
+            dayNamesMin: ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],
+            
+            showMonthAfterYear: false,
+            
+            dateFormat:'yy-mm-dd'
+            
+        });
+  
+  
+        $('#classifications').change(function(){
+            var classi = $(this).val();
+
+            if(classi == 'Sales Question'){
+                $('.form-group:not(:eq(0))').hide();
+                $('.form-group.name, .form-group.email, .form-group.subject, .form-group.description').show();
+            }else if(classi == 'Warranty Request'){
+                $('.form-group:not(:eq(0))').hide();
+                $('.form-group.name, .form-group.email, .form-group.subject, .form-group.description, .form-group.order_date, .form-group.order_number, .form-group.product, .form-group.attach').show();
+            }else if(classi == 'Tech Support Question'){
+                $('.form-group:not(:eq(0))').hide();
+                $('.form-group.name, .form-group.email, .form-group.subject, .form-group.description, .form-group.product, .form-group.attach').show();
+            }else if(classi == 'Change Order Request'){
+                $('.form-group:not(:eq(0))').hide();
+                $('.form-group.name, .form-group.email, .form-group.subject, .form-group.description, .form-group.order_date, .form-group.order_number').show();
+            }else if(classi == 'Existing Order Question'){
+                $('.form-group:not(:eq(0))').hide();
+                $('.form-group.name, .form-group.email, .form-group.subject, .form-group.description, .form-group.order_number').show();
+            }
+        });
+    })
+</script>

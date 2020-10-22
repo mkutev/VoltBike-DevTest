@@ -1,0 +1,9 @@
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+<type name="Magento\Catalog\Block\Product\ListProduct">
+    <plugin name="davidcustom-category" type="David\Customevent\Block\Catalog\Product\ListProduct" sortOrder="1"/>
+</type>
+<type name="Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\RateQuery">
+    <plugin name="custom-tablerate" type="David\Customevent\Model\Carrier\Tablerate\RateQuery" sortOrder="1"/>
+</type>
+<preference for="\Magento\Framework\Mail\Template\TransportBuilder" type="David\Customevent\Mail\Template\TransportBuilder" />
+</config>

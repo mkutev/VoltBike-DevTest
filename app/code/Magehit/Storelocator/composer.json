@@ -1,0 +1,29 @@
+{
+    "name": "magehit/module-storelocator",
+    "description": "Magehit Storelocator",
+    "require": {
+        "php": "~5.5.0|~5.6.0|~7.0.0",
+		"magehit/core": "*"
+    },
+    "type": "magento2-module",
+    "license": [
+        "Commercial"
+    ],
+    "version": "1.0.3",
+    "authors": [
+        {
+          "name": "Magehit",
+          "email": "support@magehit.com",
+          "homepage": "https://magehit.com/",
+          "role": "Developer"
+        }
+    ],
+	"autoload": {
+		"files": [
+		  "registration.php"
+		],
+		"psr-4": {
+		  "Magehit\\Storelocator\\": ""
+		}
+	}
+}

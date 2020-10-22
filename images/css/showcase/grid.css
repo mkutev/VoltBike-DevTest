@@ -1,0 +1,126 @@
+ /************ CSS Reset *****************/
+
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video{border:0;font-size:100%;font:inherit;vertical-align:baseline;margin:0;padding:0}
+article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block}
+body{line-height:150%}
+ol,ul{list-style:none}
+blockquote,q{quotes:none}
+blockquote:before,blockquote:after,q:before,q:after{content:none}
+table{border-collapse:collapse;border-spacing:0}
+
+body {
+  margin-top: 0;
+  background: #f1f1f1 url('/js/showcase/images/bg.jpg') left top repeat;
+}
+
+.row {
+	max-width: 1080px;
+	width: 100%;
+	margin: 10px auto;
+	clear: both;
+}
+
+.one-col {
+	width: 100%;
+	float:left;
+	margin: 0;
+}
+
+.two-col {
+	width: 50%;
+	float:left;
+	margin: 0;
+}
+
+.three-col {
+	width: 33.33333333%;
+	float:left;
+	margin: 0;
+}
+
+.four-col {
+	width: 25%;
+	float:left;
+	margin: 0;
+}
+
+.five-col {
+	width: 20%;
+	float:left;
+	margin: 0;
+}
+
+.six-col {
+	width: 16.66666666%;
+	float:left;
+	margin: 0;
+}
+
+.one-col, .two-col, .three-col, .four-col, .five-col, .six-col {
+  -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+  -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+  box-sizing: border-box;         /* Opera/IE 8+ */
+}
+
+
+
+img {
+  max-width: 100% !important;
+  height: auto;
+  border: none;
+  vertical-align: baseline;
+  margin: 0;
+  -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+  -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+  box-sizing: border-box;         /* Opera/IE 8+ */
+}
+
+
+h1.page-title {
+  font-family: 'Oxygen', sans-serif;
+  line-height: 150%;
+  border-bottom: 1px solid rgba(0,0,0,0.3);
+  font-size: 32px;
+  margin-top: 40px;
+  margin-bottom: 40px;
+  text-align: center;
+  overflow: hidden;
+}
+
+
+ul.features {
+  margin-left: 180px;
+  height: auto;
+  overflow: hidden;
+  margin-bottom: 40px;
+}
+
+ul.features li {
+  padding-left: 20px;
+  background: transparent url('../images/arrow.png') left center no-repeat;
+  color: #3a3a3a;
+  font-size: 15px;
+  font-family: 'Open Sans', sans-serif;
+  line-height: 180%;
+}
+
+a:link, a:visited {
+  text-decoration: none;
+  font-size: 16px;
+  line-height: 200%;
+  font-family: 'Open Sans', sans-serif;
+  color: #2399ff;
+  -webkit-transition: all .25s ease-in-out;
+  -moz-transition: all .25s ease-in-out;
+  -o-transition: all .25s ease-in-out;
+  -ms-transition: all .25s ease-in-out;
+  transition: all .25s ease-in-out;
+}
+
+a:hover {
+  color: #3a3a3a;
+}

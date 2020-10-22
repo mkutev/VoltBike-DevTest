@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Cache/etc/cache.xsd">
+    <type name="maxiolab_youtuber" translate="label,description" instance="Maxiolab\Youtuber\Model\Cache\Type">
+        <label>Maxiolab YouTubeR</label>
+        <description>Maxiolab YouTubeR module cache</description>
+    </type>
+</config>

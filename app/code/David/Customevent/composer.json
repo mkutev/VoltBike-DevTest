@@ -1,0 +1,20 @@
+{
+    "name": "david/customevent",
+    "description": "David Customevent",
+    "require": {
+        "php": "~5.5.0|~5.6.0|~7.0.0"
+    },
+	"type": "magento2-module",
+    "license": [
+        "Commercial"
+    ],
+	"version": "1.0.1",
+    "authors": [
+		{
+		  "name": "David",
+		  "email": "dkd.luckystar@gmail.com",
+		  "homepage": "https://about.me/david.dao",
+		  "role": "Magento 1 and Magento 2 - Excellent quality for reasonable price!"
+		}
+	]
+}
