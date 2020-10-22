@@ -1,5 +1,0 @@
-.store-pickup{position: relative;z-index: 9;display: block;width: 100%;float: right;}
-.title-store{cursor: pointer;background: url('../images/list.svg') no-repeat;background-position:right bottom;float: right;padding-right:22px;background-size: 20px;}
-.content-store{display: none;position: absolute;right: 0;top:100%;z-index: 9;background: #F0F0F0;padding: 10px; text-align: left;max-width: 200px;font-size: 15px;color: #000;font-weight: 500;}
-.store-pickup:hover .content-store{display: block;}
-.store-html span{display: block;margin-bottom: 5px;}

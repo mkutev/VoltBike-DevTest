@@ -1,1 +1,0 @@
-/var/www/html/app/code/Mageplaza/AjaxLayer/view/frontend/web/js/action/submit-filter.js

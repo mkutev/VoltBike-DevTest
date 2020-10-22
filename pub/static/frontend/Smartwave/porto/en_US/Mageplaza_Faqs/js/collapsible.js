@@ -1,1 +1,0 @@
-/var/www/html/app/code/Mageplaza/Faqs/view/frontend/web/js/collapsible.js

@@ -1,1 +1,0 @@
-/var/www/html/app/code/Smartwave/Megamenu/view/frontend/web/js/sw_megamenu.js

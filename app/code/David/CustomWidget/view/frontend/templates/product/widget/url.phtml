@@ -1,8 +1,0 @@
-<?php 
-$product = $block->getProduct();
-if($product):
-?>
-<a href="<?= $product->getProductUrl() ?>" title="<?= $block->getData('title'); ?>"><span><?= empty($block->getData('text')) ? $product->getName() : $block->getData('text') ?></span></a>
-<?php else: ?>
-    <?= __('Cannot load product'); ?>
-<?php endif; ?>

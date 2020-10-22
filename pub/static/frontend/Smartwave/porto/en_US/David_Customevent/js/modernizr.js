@@ -1,1 +1,0 @@
-/var/www/html/app/code/David/Customevent/view/frontend/web/js/modernizr.js

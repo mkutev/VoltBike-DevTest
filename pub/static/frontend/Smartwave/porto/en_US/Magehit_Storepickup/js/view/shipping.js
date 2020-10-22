@@ -1,1 +1,0 @@
-/var/www/html/app/code/Magehit/Storepickup/view/frontend/web/js/view/shipping.js
