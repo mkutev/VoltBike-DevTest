@@ -1,0 +1,27 @@
+<style type="text/css">
+	#storepickup-carrier input,#storepickup-carrier select{display: block;margin-bottom: 15px;}
+	#storepickup-carrier label{display: block;margin-bottom: 7px;}
+</style>
+
+<div id="storepickup-carrier" data-bind="visible: selectedMethod().name == 'storepickup_storepickup'" style="width: 500px;max-width: 100%;display: none;">
+	<div class="field _required">
+		<label class="label" for="storepickup_store"><strong>Select Store:</strong></label>
+		<select id="storepickup_store" class="required-entry" name="storepickup_store" data-bind="
+	    optionsValue: 'value',
+	    optionsText: 'label',
+	    value: selectedValue,
+	    options: selectedMethod().list_options,
+	    optionsCaption: 'Choose Store...',
+	    event: { change: getAjaxinfo }
+	    "></select>
+		<input type="hidden" data-bind="triggerChange"/> 
+	    <div class="content-storepickup">
+			
+	    </div>
+ 	</div>
+</div>
+
+
+
+
+

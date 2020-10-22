@@ -1,0 +1,8 @@
+<?php 
+$product = $block->getProduct();
+if($product):
+?>
+<span><?= $product->getShortDescription(); ?></span>
+<?php else: ?>
+    <?= __('Cannot load product'); ?>
+<?php endif; ?>

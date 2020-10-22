@@ -1,0 +1,28 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+	<default>
+		<store_locator>
+			<general>
+				<enable>1</enable>
+				<page_title>Store Locator</page_title>
+				<url>storelocator</url>
+				<suffix/>
+				<enable_top/>
+				<label_link>Store Locator</label_link>
+				<!-- <enable_schedule>1</enable_schedule> -->
+			</general>
+			<map>
+				<api_key/>
+				<center_lng/>
+				<center_lat/>
+				<initial_zoom>2</initial_zoom>
+				<search_result_zoom>2</search_result_zoom>
+				<detail_zoom>2</detail_zoom>
+			</map>
+			<radius>
+				<radius_unit>kilometer</radius_unit>
+			</radius>
+		
+		</store_locator>
+	</default>
+</config>

@@ -1,0 +1,26 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Acl/etc/acl.xsd">
+	<acl>
+		<resources>
+			<resource id="Magento_Backend::admin">
+				<resource id="Magehit_Core::core">
+					<resource id="Magehit_Storelocator::manager" sortOrder="5" title="Manage Stores View Menu" />
+					<resource id="Magehit_Storelocator::storelocator_index" sortOrder="10" title="Manage Stores" >
+							<resource id="Magehit_Storelocator::storelocator_index_save" sortOrder="10" title="Save Store"/>
+							<resource id="Magehit_Storelocator::storelocator_index_delete" sortOrder="20" title="Delete Store"/>
+							<resource id="Magehit_Storelocator::storelocator_index_update" sortOrder="30" title="Update Store"/>
+							<resource id="Magehit_Storelocator::storelocator_index_new" sortOrder="30" title="Add New Store"/>
+							<resource id="Magehit_Storelocator::storelocator_index_view" sortOrder="40" title="View Store"/>
+					</resource>
+				</resource>
+				<resource id="Magento_Backend::stores">
+					<resource id="Magento_Backend::stores_settings">
+						<resource id="Magento_Config::config">
+							<resource id="Magehit_Storelocator::magehit_storelocator" title="Magehit Store Locator"/>
+						</resource>
+					</resource>
+				</resource>
+			</resource>
+		</resources>
+	</acl>
+</config>

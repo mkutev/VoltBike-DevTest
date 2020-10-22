@@ -1,0 +1,376 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<widgets xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Widget:etc/widget.xsd">
+    <widget id="maxiolab_youtuber_video" class="Maxiolab\Youtuber\Block\Widget\Video">
+		<label translate="true">Maxiolab :: YouTube single video</label>
+		<description translate="true">YouTube widget for Magento</description>
+        <parameters>
+			<parameter name="id" xsi:type="text" visible="true" required="true" sort_order="20">
+                <label translate="true">Video ID</label>
+                <description translate="true">How to get video/playlist/channel ID you can read in the documentation</description>
+				<value></value>
+            </parameter>
+			<parameter name="display" xsi:type="text" visible="true" sort_order="50">
+                <label translate="true">Display</label>
+				<value>title,date,channel,description,meta</value>
+            </parameter>
+			<parameter name="size" xsi:type="select" visible="true" sort_order="60">
+                <label translate="true">Size of the video thumbnail</label>
+                <options>
+                    <option name="default" value="default">
+                        <label translate="true">Default</label>
+                    </option>
+                    <option name="standard" value="standard">
+                        <label translate="true">Standard</label>
+                    </option>
+                    <option name="medium" value="medium" selected="true">
+                        <label translate="true">Medium</label>
+                    </option>
+                    <option name="high" value="high">
+                        <label translate="true">High</label>
+                    </option>
+                    <option name="maxres" value="maxres">
+                        <label translate="true">Maxres</label>
+                    </option>
+                </options>
+            </parameter>
+			<parameter name="mode" xsi:type="select" visible="true" sort_order="70">
+                <label translate="true">Mode</label>
+                <options>
+                    <option name="lightbox" value="lightbox" selected="true">
+                        <label translate="true">Lightbox</label>
+                    </option>
+                    <option name="embed" value="embed">
+                        <label translate="true">Embed</label>
+                    </option>
+                    <option name="link" value="link">
+                        <label translate="true">Link</label>
+                    </option>
+                </options>
+            </parameter>
+			<parameter name="theme" xsi:type="text" visible="true" required="true" sort_order="80">
+                <label translate="true">Theme</label>
+				<value>default</value>
+            </parameter>
+			<parameter name="date_format" xsi:type="text" visible="true" required="true" sort_order="90">
+                <label translate="true">Date format</label>
+				<description translate="true">Documentation about format can be found here: http://www.php.net/manual/en/function.date.php</description>
+				<value>d.m.Y</value>
+            </parameter>
+			<parameter name="width" xsi:type="text" visible="true" sort_order="110">
+                <label translate="true">Video width</label>
+				<description translate="true">Width of the video. Valid only in embed mode</description>
+                <depends>
+					<parameter name="mode" value="embed" />
+                </depends>
+				<value>100%</value>
+            </parameter>
+			<parameter name="height" xsi:type="text" visible="true" sort_order="120">
+                <label translate="true">Video height</label>
+				<description translate="true">Height of the video. Valid only in embed mode</description>
+                <depends>
+					<parameter name="mode" value="embed" />
+                </depends>
+				<value>300</value>
+            </parameter>
+			<parameter name="ytp_params" xsi:type="text" visible="true" sort_order="190">
+                <label translate="true">YouTube player parameters</label>
+				<description>For example: autoplay=1 Documentation here: https://developers.google.com/youtube/player_parameters</description>
+                <depends>
+					<parameter name="mode" value="embed" />
+                </depends>
+				<value></value>
+            </parameter>
+        </parameters>
+	</widget>
+    <widget id="maxiolab_youtuber_playlist" class="Maxiolab\Youtuber\Block\Widget\Playlist">
+		<label translate="true">Maxiolab :: YouTube playlist</label>
+		<description translate="true">YouTube widget for Magento</description>
+        <parameters>
+			<parameter name="id" xsi:type="text" visible="true" required="true" sort_order="20">
+                <label translate="true">Playlist ID</label>
+                <description translate="true">How to get video/playlist/channel ID you can read in the documentation</description>
+				<value></value>
+            </parameter>
+			<parameter name="videos" xsi:type="text" visible="true" sort_order="40">
+                <label translate="true">Video IDs</label>
+                <description translate="true">Video IDs separated by comma, if you want to display specific videos as a playlist</description>
+				<value></value>
+            </parameter>
+			<parameter name="display" xsi:type="text" visible="true" sort_order="50">
+                <label translate="true">Display</label>
+				<value>title,date,description,meta</value>
+            </parameter>
+			<parameter name="size" xsi:type="select" visible="true" sort_order="60">
+                <label translate="true">Size of the video thumbnail</label>
+                <options>
+                    <option name="default" value="default">
+                        <label translate="true">Default</label>
+                    </option>
+                    <option name="standard" value="standard">
+                        <label translate="true">Standard</label>
+                    </option>
+                    <option name="medium" value="medium" selected="true">
+                        <label translate="true">Medium</label>
+                    </option>
+                    <option name="high" value="high">
+                        <label translate="true">High</label>
+                    </option>
+                    <option name="maxres" value="maxres">
+                        <label translate="true">Maxres</label>
+                    </option>
+                </options>
+            </parameter>
+			<parameter name="mode" xsi:type="select" visible="true" sort_order="70">
+                <label translate="true">Mode</label>
+                <options>
+                    <option name="lightbox" value="lightbox" selected="true">
+                        <label translate="true">Lightbox</label>
+                    </option>
+                    <option name="embed" value="embed">
+                        <label translate="true">Embed</label>
+                    </option>
+                    <option name="link" value="link">
+                        <label translate="true">Link</label>
+                    </option>
+                </options>
+            </parameter>
+			<parameter name="theme" xsi:type="text" visible="true" required="true" sort_order="80">
+                <label translate="true">Theme</label>
+				<value>default</value>
+            </parameter>
+			<parameter name="date_format" xsi:type="text" visible="true" required="true" sort_order="90">
+                <label translate="true">Date format</label>
+				<description translate="true">Documentation about format can be found here: http://www.php.net/manual/en/function.date.php</description>
+				<value>d.m.Y</value>
+            </parameter>
+			<parameter name="max_words" xsi:type="text" visible="true" sort_order="100">
+                <label translate="true">Words limit</label>
+				<description translate="true">Limit number of words in video description</description>
+				<value>20</value>
+            </parameter>
+			<parameter name="width" xsi:type="text" visible="true" sort_order="110">
+                <label translate="true">Video width</label>
+				<description translate="true">Width of the video. Valid only in embed mode</description>
+                <depends>
+					<parameter name="mode" value="embed" />
+                </depends>
+				<value>100%</value>
+            </parameter>
+			<parameter name="height" xsi:type="text" visible="true" sort_order="120">
+                <label translate="true">Video height</label>
+				<description translate="true">Height of the video. Valid only in embed mode</description>
+                <depends>
+					<parameter name="mode" value="embed" />
+                </depends>
+				<value>300</value>
+            </parameter>
+			<parameter name="cols" xsi:type="text" visible="true" sort_order="130">
+                <label translate="true">Columns</label>
+				<description translate="true">Number of videos columns</description>
+				<value>3</value>
+            </parameter>
+			<parameter name="rows" xsi:type="text" visible="true" sort_order="140">
+                <label translate="true">Rows</label>
+				<description translate="true">Number of videos rows</description>
+				<value>2</value>
+            </parameter>
+			<parameter name="responsive_limit" xsi:type="select" visible="true" sort_order="150">
+                <label translate="true">Limit columns display</label>
+				<description translate="true">If the device will be smaller than indicated, then columns will be collapsed</description>
+                <options>
+                    <option name="xs" value="xs">
+                        <label translate="true">Extra small screens</label>
+                    </option>
+                    <option name="sm" value="sm" selected="true">
+                        <label translate="true">Small screens</label>
+                    </option>
+                    <option name="md" value="md">
+                        <label translate="true">Medium screens</label>
+                    </option>
+                    <option name="lg" value="lg">
+                        <label translate="true">Large screens</label>
+                    </option>
+                </options>
+            </parameter>
+            <parameter name="load_more" xsi:type="select" visible="true" sort_order="160">
+                <label translate="true">Show "load more" button</label>
+                <options>
+                    <option name="yes" value="1" selected="true">
+                        <label translate="true">Yes</label>
+                    </option>
+                    <option name="no" value="">
+                        <label translate="true">No</label>
+                    </option>
+                </options>
+            </parameter>
+			<parameter name="load_more_text" xsi:type="text" visible="true" sort_order="170">
+                <label translate="true">Text on "load more" button</label>
+				<value>Load more</value>
+            </parameter>
+            <parameter name="infinite_scroll" xsi:type="select" visible="true" sort_order="180">
+                <label translate="true">Infinite scrolling</label>
+				<description translate="true">It automatically loads more videos when you scroll to the end of the video list. This option is valid only when "load more" button is ON</description>
+                <depends>
+                    <parameter name="load_more" value="1" />
+                </depends>
+                <options>
+                    <option name="yes" value="1">
+                        <label translate="true">Yes</label>
+                    </option>
+                    <option name="no" value="" selected="true">
+                        <label translate="true">No</label>
+                    </option>
+                </options>
+            </parameter>
+			<parameter name="ytp_params" xsi:type="text" visible="true" sort_order="190">
+                <label translate="true">YouTube player parameters</label>
+				<description>For example: autoplay=1 Documentation here: https://developers.google.com/youtube/player_parameters</description>
+                <depends>
+					<parameter name="mode" value="embed" />
+                </depends>
+				<value></value>
+            </parameter>
+        </parameters>
+	</widget>
+    <widget id="maxiolab_youtuber_channel" class="Maxiolab\Youtuber\Block\Widget\Channel">
+		<label translate="true">Maxiolab :: YouTube channel</label>
+		<description translate="true">YouTube widget for Magento</description>
+        <parameters>
+			<parameter name="id" xsi:type="text" visible="true" required="true" sort_order="20">
+                <label translate="true">Channel ID</label>
+                <description translate="true">How to get video/playlist/channel ID you can read in the documentation</description>
+				<value></value>
+            </parameter>
+			<parameter name="playlist_id" xsi:type="text" visible="true" sort_order="30">
+                <label translate="true">Default playlist ID</label>
+				<value></value>
+            </parameter>
+			<parameter name="display" xsi:type="text" visible="true" sort_order="50">
+                <label translate="true">Display</label>
+				<value>title,description,meta</value>
+            </parameter>
+			<parameter name="size" xsi:type="select" visible="true" sort_order="60">
+                <label translate="true">Size of the video thumbnail</label>
+                <options>
+                    <option name="default" value="default">
+                        <label translate="true">Default</label>
+                    </option>
+                    <option name="standard" value="standard">
+                        <label translate="true">Standard</label>
+                    </option>
+                    <option name="medium" value="medium" selected="true">
+                        <label translate="true">Medium</label>
+                    </option>
+                    <option name="high" value="high">
+                        <label translate="true">High</label>
+                    </option>
+                    <option name="maxres" value="maxres">
+                        <label translate="true">Maxres</label>
+                    </option>
+                </options>
+            </parameter>
+			<parameter name="mode" xsi:type="select" visible="true" sort_order="70">
+                <label translate="true">Mode</label>
+                <options>
+                    <option name="lightbox" value="lightbox" selected="true">
+                        <label translate="true">Lightbox</label>
+                    </option>
+                    <option name="embed" value="embed">
+                        <label translate="true">Embed</label>
+                    </option>
+                    <option name="link" value="link">
+                        <label translate="true">Link</label>
+                    </option>
+                </options>
+            </parameter>
+			<parameter name="theme" xsi:type="text" visible="true" required="true" sort_order="80">
+                <label translate="true">Theme</label>
+				<value>default</value>
+            </parameter>
+			<parameter name="date_format" xsi:type="text" visible="true" required="true" sort_order="90">
+                <label translate="true">Date format</label>
+				<description translate="true">Documentation about format can be found here: http://www.php.net/manual/en/function.date.php</description>
+				<value>d.m.Y</value>
+            </parameter>
+			<parameter name="width" xsi:type="text" visible="true" sort_order="110">
+                <label translate="true">Video width</label>
+				<description translate="true">Width of the video. Valid only in embed mode</description>
+                <depends>
+					<parameter name="mode" value="embed" />
+                </depends>
+				<value>100%</value>
+            </parameter>
+			<parameter name="height" xsi:type="text" visible="true" sort_order="120">
+                <label translate="true">Video height</label>
+				<description translate="true">Height of the video. Valid only in embed mode</description>
+                <depends>
+					<parameter name="mode" value="embed" />
+                </depends>
+				<value>300</value>
+            </parameter>
+			<parameter name="cols" xsi:type="text" visible="true" sort_order="130">
+                <label translate="true">Columns</label>
+				<description translate="true">Number of videos columns</description>
+				<value>2</value>
+            </parameter>
+			<parameter name="rows" xsi:type="text" visible="true" sort_order="140">
+                <label translate="true">Rows</label>
+				<description translate="true">Number of videos rows</description>
+				<value>3</value>
+            </parameter>
+			<parameter name="responsive_limit" xsi:type="select" visible="true" sort_order="150">
+                <label translate="true">Limit columns display</label>
+				<description translate="true">If the device will be smaller than indicated, then columns will be collapsed</description>
+                <options>
+                    <option name="xs" value="xs">
+                        <label translate="true">Extra small screens</label>
+                    </option>
+                    <option name="sm" value="sm" selected="true">
+                        <label translate="true">Small screens</label>
+                    </option>
+                    <option name="md" value="md">
+                        <label translate="true">Medium screens</label>
+                    </option>
+                    <option name="lg" value="lg">
+                        <label translate="true">Large screens</label>
+                    </option>
+                </options>
+            </parameter>
+            <parameter name="load_more" xsi:type="select" visible="true" sort_order="160">
+                <label translate="true">Show "load more" button</label>
+                <options>
+                    <option name="yes" value="1" selected="true">
+                        <label translate="true">Yes</label>
+                    </option>
+                    <option name="no" value="">
+                        <label translate="true">No</label>
+                    </option>
+                </options>
+            </parameter>
+			<parameter name="load_more_text" xsi:type="text" visible="true" sort_order="170">
+                <label translate="true">Text on "load more" button</label>
+				<value>Load more</value>
+            </parameter>
+            <parameter name="infinite_scroll" xsi:type="select" visible="true" sort_order="180">
+                <label translate="true">Infinite scrolling</label>
+				<description translate="true">It automatically loads more videos when you scroll to the end of the video list. This option is valid only when "load more" button is ON</description>
+                <options>
+                    <option name="yes" value="1">
+                        <label translate="true">Yes</label>
+                    </option>
+                    <option name="no" value="" selected="true">
+                        <label translate="true">No</label>
+                    </option>
+                </options>
+            </parameter>
+			<parameter name="ytp_params" xsi:type="text" visible="true" sort_order="190">
+                <label translate="true">YouTube player parameters</label>
+				<description>For example: autoplay=1 Documentation here: https://developers.google.com/youtube/player_parameters</description>
+                <depends>
+					<parameter name="mode" value="embed" />
+                </depends>
+				<value></value>
+            </parameter>
+        </parameters>
+	</widget>
+</widgets>

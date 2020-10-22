@@ -1,0 +1,186 @@
+ /************ Impoering Google Fonts *****************/
+
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Open Sans'), local('OpenSans'), url(http://themes.googleusercontent.com/static/fonts/opensans/v6/cJZKeOuBrn4kERxqtaUH3T8E0i7KZn-EPnyo3HZu7kw.woff) format('woff');
+}
+@font-face {
+  font-family: 'Oxygen';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Oxygen Light'), local('Oxygen-Light'), url(http://themes.googleusercontent.com/static/fonts/oxygen/v2/AwBqWF2kjhlybWamaKMPcT8E0i7KZn-EPnyo3HZu7kw.woff) format('woff');
+}
+
+.item-container-light {
+	/* fallback */
+	background-color: #eee;
+	/* Safari 4-5, Chrome 1-9 */
+	background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#f4f4f4), to(#ddd));
+	/* Safari 5.1, Chrome 10+ */
+	background: -webkit-linear-gradient(top, #f4f4f4, #ddd);
+	/* Firefox 3.6+ */
+	background: -moz-linear-gradient(top, #f4f4f4, #ddd);
+	/* IE 10 */
+	background: -ms-linear-gradient(top, #f4f4f4, #ddd);
+	/* Opera 11.10+ */
+	background: -o-linear-gradient(top, #f4f4f4, #ddd);
+	border: 8px solid #f4f4f4;
+	box-shadow: 0 0 2px rgba(0,0,0,0.4);
+}
+
+.item-container-dark {
+	/* fallback */
+	background-color: #3a3a3a;
+	/* Safari 4-5, Chrome 1-9 */
+	background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#3a3a3a), to(#1a1a1a));
+	/* Safari 5.1, Chrome 10+ */
+	background: -webkit-linear-gradient(top, #3a3a3a, #1a1a1a);
+	/* Firefox 3.6+ */
+	background: -moz-linear-gradient(top, #3a3a3a, #1a1a1a);
+	/* IE 10 */
+	background: -ms-linear-gradient(top, #3a3a3a, #1a1a1a);
+	/* Opera 11.10+ */
+	background: -o-linear-gradient(top, #3a3a3a, #1a1a1a);
+	border: 8px solid #3a3a3a;
+	box-shadow: 0 0 2px rgba(0,0,0,0.4);
+}
+
+div[class^="item-container-"] {
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	padding: 19px 15px;
+	margin: 20px auto;
+}
+
+div[class^="item-container-"] > label {
+	height: 80px;
+	width: 160px;
+	opacity: 0.8;
+	overflow: hidden;
+	border-color: transparent;
+	border-width: 2px;
+	border-style: solid;
+	display: table-cell;
+	vertical-align: middle;
+	margin: 0 4px 15px;
+	float: left;
+	cursor: pointer;
+	-webkit-transition: all .25s ease-in-out;
+	-moz-transition: all .25s ease-in-out;
+	-o-transition: all .25s ease-in-out;
+	-ms-transition: all .25s ease-in-out;
+	transition: all .25s ease-in-out;
+}
+
+div[class^="item-container-"] > label img.item-thumbnail {
+	width: 100%;
+	min-height: 100%;
+	height: auto;
+	vertical-align: middle;
+	margin: auto;
+}
+
+div[class^="item-container-"] > label:hover {
+	opacity: 1;
+	border-color: #2399ff;
+}
+
+
+div[class^="item-container-"] > input[type="radio"] {
+	display: none;
+	position: absolute;
+}
+
+
+div[class^="item-container-"] > input:checked + label {
+	cursor: default;
+	opacity: 1;
+	border: 2px solid #2399ff;
+}
+
+div[class^="item-container-"] > ul {
+	list-style: none;
+	position: relative;
+	display: block;
+	overflow: hidden;
+	clear: both;
+	height: auto;
+	height: 500px;
+	margin: 10px 0 0 0;
+	padding: 10px 0 0 0;
+	border: 0;
+	outline: none;
+	font-size: 13px;
+}
+
+div[class^="item-container-"] > ul > li {
+	position: absolute;
+	width: 100%;
+	overflow: hidden;
+	height: 100%;
+	padding: 6px;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	opacity: 0;
+	transition: all 0.4s;
+	-o-transition: all 0.4s;	
+	-ms-transition: all 0.4s;	
+	-moz-transition: all 0.4s;	
+	-webkit-transition: all 0.4s;
+}
+div[class^="item-container-"] > .tab-content-first:checked ~ ul .tab-content-first,
+div[class^="item-container-"] > .tab-content-2:checked ~ ul .tab-content-2,
+div[class^="item-container-"] > .tab-content-3:checked ~ ul .tab-content-3,
+div[class^="item-container-"] > .tab-content-4:checked ~ ul .tab-content-4,
+div[class^="item-container-"] > .tab-content-5:checked ~ ul .tab-content-5,
+div[class^="item-container-"] > .tab-content-6:checked ~ ul .tab-content-6,
+div[class^="item-container-"] > .tab-content-7:checked ~ ul .tab-content-7,
+div[class^="item-container-"] > .tab-content-8:checked ~ ul .tab-content-8,
+div[class^="item-container-"] > .tab-content-9:checked ~ ul .tab-content-9,
+div[class^="item-container-"] > .tab-content-last:checked ~ ul .tab-content-last {
+	z-index: 1;
+	top: 0;
+	left: 0;
+	opacity: 1;
+	-webkit-transform: scale(1,1);
+	-webkit-transform: rotate(0deg);
+}
+
+div[class^="tab-content-"] img {
+	height: 100%;
+	width: auto;
+}
+
+
+/* Effects */
+
+ 
+
+.zoom-items > ul > li {
+	top: 0;
+	-webkit-transform: scale(0.1,0.1);
+}
+.fade-items > ul > li {
+	top: 0;
+	left: 0;
+	opacity: 0;
+}
+.rotate-items  > ul > li {
+	-webkit-transform: rotate(180deg);
+}
+.slide-from-top > ul > li {
+	top: -40px;
+}
+.slide-from-right > ul > li {
+	top: 0;
+	left: 80px;
+}
+.slide-from-bottom > ul > li {
+	top: 40px;
+}
+.slide-from-left > ul > li {
+	top: 0;
+	left: -80px;
+}

@@ -1,0 +1,87 @@
+
+<section class="mxYouTubeR mxYouTubeR_playlist mxYouTubeR_theme_<?php echo $block->getData('theme');?>">
+	<div class="mxyt-playlist mxyt-cols-<?php echo $block->getData('responsive_limit');?>">
+    	<div class="mxyt-row">
+			<?php
+			$i=0;
+			$total = count($block->videos);
+			foreach($block->videos as $video){
+				$i++;
+				?>
+                <div class="mxyt-col-<?php echo $block->getData('cols');?>">
+                    <div class="mxyt-playlist-item">
+                        <div class="mxyt-video">
+                            <?php
+                            echo $block->getVideoHTML($video,$block->getData());
+                            ?>
+                        </div>
+                        <?php 
+                        if($block->canDisplay('title')){
+                            ?>
+                            <div class="mxyt-title">
+                                <?php
+                                echo '<h3>'.$video->snippet->title.'</h3>';
+                                ?>
+                            </div>
+                            <?php
+                        }
+						if($block->canDisplay('date')){
+                            ?>
+                            <div class="mxyt-date">
+                                <?php
+                                echo $block->getVideoDate($video->snippet->publishedAt);
+                                ?>
+                            </div>
+                            <?php
+                        }
+                        if($block->canDisplay('description')){
+                            ?>
+                            <div class="mxyt-description">
+                                <div class="mxyt-text-description mxyt-less"><div class="mxyt-text-description-full"><?php echo $block->getFullVideoDescr($video->snippet->description);?></div></div>
+                            </div>
+                            <?php
+                        }
+                        if($block->canDisplay('meta')){
+                            ?>
+                            <div class="mxyt-meta">
+                                <div class="mxyt-views mxyt-tip" title="<?php echo __('Number of views');?>"><i class="mxyt-icon mxyt-icon-views"></i> <?php echo (int)@$video->statistics->viewCount;?></div>
+                                <div class="mxyt-likes mxyt-tip" title="<?php echo __('Number of likes');?>"><i class="mxyt-icon mxyt-icon-likes"></i> <?php echo (int)@$video->statistics->likeCount;?></div>
+                                <div class="mxyt-comments mxyt-tip" title="<?php echo __('Number of comments');?>"><i class="mxyt-icon mxyt-icon-comments"></i> <?php echo (int)@$video->statistics->commentCount;?></div>
+                            </div>
+                            <?php
+                        }
+                    ?>
+                    </div>
+                </div>
+                <?php
+				if($i%(int)$block->getData('cols')==0 && $i<$total){
+					echo '</div><div class="mxyt-row">';
+				}
+			}
+            ?>
+        </div>
+    </div>
+    
+	<?php
+    if($block->getData('load_more') && isset($block->playlist->nextPageToken)){
+        echo '<div class="mxyt-more"><span class="mxyt-button mxyt-load-more'.($block->getData('infinite_scroll')?' mxyt-infinite-scroll':'').'" data-mxyt-pagetoken="'.$block->playlist->nextPageToken.'" data-mxyt-cfg="'.$block->getAjaxCfg().'">'.$block->getData('load_more_text').'...</span></div>';
+    }
+    ?>
+    
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

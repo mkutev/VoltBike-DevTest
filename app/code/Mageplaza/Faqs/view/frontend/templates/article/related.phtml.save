@@ -1,0 +1,49 @@
+<?php
+/** @var Mageplaza\Faqs\Block\Category\View $block */
+$categories        = $block->getCategoryCollection();
+$currentCategoryId = $block->getCategory();
+$i= 0;
+
+/** @var Mageplaza\Faqs\Block\Article\View $parentBlock */
+
+$parentBlock = $block->getParentBlock();
+$_article = $parentBlock->getArticle();
+
+?>
+<style type="text/css">
+	.collapsible-header.in-active:hover{
+		color: white;
+		background-color: black;
+	}
+</style>
+<?php if ($categories->getData()): ?>
+    <?php foreach ($categories as $category):
+        if ($category->getQuestionNum() != '0' && in_array($category->getId(),$_article->getCategoryIds())): ?>
+        	<div class="mpfaqs-container__content__header__information col xl11 m9 s12" style="padding-left: 0px !important;">
+                <h4 style="border-bottom: #7b7979 solid 1px;width: auto;line-height: 30px;"><?php echo __(ucfirst($category->getName())); ?></h4>
+            </div>
+            <div class="mpfaqs-container__content__body row">
+                <ul class="mpfaqs-list__block__question" style="text-align: initial;">
+                    <?php foreach ($articles = $block->getArticleByCategory($category->getId()) as $article): ?>
+                    	<?php if($article->getArticleId() == $_article->getArticleId()){   ?
+>
+
+			<? } else { ?>
+                	 	<div class="collapsible-header in-active" data-id="<?php echo $category->getId() . '-' . $article->getId() ?>">
+	                        <li class="mpfaqs-item" style="display: list-item;">
+	                        	<span><a href="<?php echo $article->getUrl();?>"><i class="far fa-file-alt"></i>&nbsp;<?php echo $article->getName();?></a></span>
+	                        </li>
+			
+                    	</div>
+                        <?php } //if($i<10){$i++;}else{ break; } ?>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+        <?php
+        break;
+        endif;
+
+        endforeach;?>
+<?php else: ?>
+    <div><?php echo __("There is no FAQ match with your search."); ?></div>
+<?php endif; ?>

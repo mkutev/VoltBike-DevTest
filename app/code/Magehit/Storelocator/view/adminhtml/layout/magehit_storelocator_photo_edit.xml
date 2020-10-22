@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-2columns-left" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="left">
+            <block class="Magehit\Storelocator\Block\Adminhtml\Photo\Edit\Tabs" name="magehit_storelocator_photo_edit_tabs">
+                <block class="Magehit\Storelocator\Block\Adminhtml\Photo\Edit\Tab\Main" name="tab_main"/>
+                <action method="addTab">
+                    <argument name="name" xsi:type="string">main</argument>
+                    <argument name="block" xsi:type="string">tab_main</argument>
+                </action>
+            </block>
+        </referenceContainer>
+        <referenceContainer name="content">
+            <block class="Magehit\Storelocator\Block\Adminhtml\Photo\Edit" name="storelocator_photo_edit"/>
+        </referenceContainer>
+    </body>
+</page>

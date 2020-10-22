@@ -1,0 +1,304 @@
+<?php
+/**
+ * @var $block \Magehit\Storelocator\Block\Search
+ */
+
+?>
+<?php
+	if($block->isEnable()):
+?>
+<script sync defer type="text/javascript"
+        src="https://maps.googleapis.com/maps/api/js?libraries=places&key=<?= trim($block->getHelper()->getConfig('map/api_key'))?>">
+</script>
+<style>
+.my-instashow{
+	clear: both;
+    display: inline-block;
+    width: 100%;
+}
+.my-instashow .content{display: inline-block;width: 100%;}
+.my-instashow ul{padding:0;}
+.my-instashow li{width:calc(100%/5);float:left;list-style: none;position:relative;margin: 0;overflow:hidden;}
+.my-instashow li .caption{
+	position: absolute;
+    width: 100%;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    transition: all .4s;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    background-color: rgba(0,0,0,0.79);
+    opacity: 0; 
+	text-align: center;
+	color: #fff;
+	padding: 0 15px;
+}
+.my-instashow li .caption .top{
+	font-size: 20px;
+    width: 120px;
+    margin: 0 auto 10px;
+}
+.my-instashow li img{
+	opacity: 1;
+    transition: all .4s;
+    display: block;
+}
+#instagram_loadmore{
+	display: table;
+    font-family: 'proxima-nova', sans-serif;
+    font-weight: bold;
+    background: transparent;
+    border: 2px solid #4f4f4f;
+    border-radius: 30px;
+    color: #4f4f4f;
+    padding: 12px 25px;
+    max-width: 300px;
+    margin: 10px auto 5px; 
+	cursor: pointer;
+}
+#instagram_loadmore.disable{
+	cursor: not-allowed;
+	pointer-events: none;
+}
+.my-instashow li:hover .caption{opacity:1;z-index: 3;}
+.my-instashow li:hover img{transform: scale(1.2);}
+.mfp-container button:not(.primary){
+	background: transparent;
+    border: 0;
+}
+
+.contact-us {
+ font-size: 14px;
+ line-height: 27px;
+}
+
+</style>
+<div>
+<h2 style="text-align: center;">Meet the VoltBike <b>Community</b></h2>
+<p style="text-align: center;" class="contact-us">Do you want your photo featured here? Post your bike on Instagram with hashtag #voltbikeyukon #voltbikebravo #voltbikeelegant #voltbikeurban. Don't forget to add location!</p>
+<p style="text-align: center;"><strong><a href="<?php echo $this->getUrl('upload') ?>">Learn more</a> about how you can get your photo featured!</strong></p>
+</div>
+<div class="storelocator-search">
+    <form id="frm-storelocator-search">
+        <content class="content-search-slt">
+            <div class="map_container top search-map">
+                <div id="map" style="height: 400px"></div>
+            </div>
+            <p class="loader" id="loading_mask_loader" style="display:none">
+                <img src="<?php echo $block->getViewFileUrl('Magehit_Storelocator::images/ajax-loader-tr.gif'); ?>" alt="<?php echo __('Loading...') ?>"/>
+                <br/>
+                <?php echo __('Please wait...') ?>
+            </p>
+            <div class="my-instashow">
+				<div class="content"></div>
+				<div id="instagram_loadmore" style="display:none" data-location="all" data-page="0" class="load-more load-more--button"><?php echo __('Load more content') ?></div>
+			</div>
+            
+        </content>
+    </form>
+</div>
+<script type="text/javascript">
+require([
+	"jquery",
+	"mageplaza/core/jquery/popup"
+], function ($){
+	var center_lat = <?php echo '47.551495';//$block->getCenterLat() ?>;
+	var center_lng = <?php echo '-101.002014';//$block->getCenterLng() ?>;
+	var initial_zoom = 4;
+	var baseurl = '<?php echo $block->getBaseUrl() ?>';
+	var map;
+	var markers = [];
+	var infoWindow;
+	var maxLength = 150;
+	var ajaxFindPost =  baseurl+'storelocator/index/getpostbylocation';
+	
+	google.maps.event.addDomListener(window, 'load',  loadMap);
+	//default load media of instagram
+	loadAllInstagramMedia(0);
+	
+	function loadAllInstagramMedia(page,location){
+		if(location !='all'){
+			var rqUrl = page > 0 ? ajaxFindPost + '?locationid='+ location +'&page=' + page : ajaxFindPost + '?locationid=all';
+		}else{
+			var rqUrl = page > 0 ? ajaxFindPost + '?locationid=all&page=' + page : ajaxFindPost + '?locationid=all';
+		}
+		//console.log('page :' + page);
+		//console.log(rqUrl);
+		$.ajax({
+			url: rqUrl,
+			type: "GET",
+			cache: false,
+			dataType: "json",
+		}).done(function(response) {
+			generateListImage(response,page);
+		});
+	}
+	
+	function toHtmlEntities(string){
+		return string.replace(/./gm, function(s) {
+			return "&#" + s.charCodeAt(0) + ";";
+		});
+	}
+	
+	$('#instagram_loadmore').click(function(){
+		var nextPage = parseInt($(this).attr('data-page')) + 1;
+		var location = $(this).attr('data-location');
+		$('#instagram_loadmore').addClass('disable');
+		loadAllInstagramMedia(nextPage, location);
+	})
+	
+	
+    function loadMap() {
+        //initMap();
+        map = new google.maps.Map(document.getElementById("map"), {
+            center: new google.maps.LatLng(center_lat,center_lng),
+            zoom: initial_zoom,
+            mapTypeId: 'roadmap',
+            mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+        });     
+         infoWindow = new google.maps.InfoWindow();
+
+        input = document.getElementById('address');
+        var bounds = new google.maps.LatLngBounds();
+        var searchBox = new google.maps.places.SearchBox(input);
+        
+        var searchUrl = baseurl+'storelocator/index/getinstagramlocation';
+        $.ajax({url: searchUrl,
+                type: "GET",
+                cache: false,
+                dataType: "xml",
+        }).done(function(xml) {
+
+            //var xml = parseXml(data);
+            var markerNodes = xml.documentElement.getElementsByTagName("marker");
+            if (markerNodes.length == 0) {
+                document.getElementById("loading_mask_loader").style.display = 'none';
+                // document.getElementById("my-instashow").style.display = 'none';
+                // var address = document.getElementById("address").value;
+                alert("There is no store");
+                return;
+            }
+                /* document.getElementById("my-instashow").style.display = 'block'; */
+                var thum = '';
+            for (var i = 0; i < markerNodes.length; i++) {
+                var locationid = markerNodes[i].getAttribute("locationid");
+                var name = markerNodes[i].getAttribute("name");
+                var count = markerNodes[i].getAttribute("count");
+                var latlng = new google.maps.LatLng(
+                    parseFloat(markerNodes[i].getAttribute("lat")),
+                    parseFloat(markerNodes[i].getAttribute("lng"))
+				);
+
+                createMarker(latlng, locationid, name, count);
+            }
+			//var center = bounds.getCenter();
+			//bounds.extend( new google.maps.LatLng(center_lat,center_lng));
+           // map.fitBounds(bounds);
+            var zoom = map.getZoom();
+            zoom = Math.min(zoom, 20);
+            map.setZoom(zoom);
+
+            document.getElementById("loading_mask_loader").style.display = 'none';
+        });
+    }
+			
+	function createMarker(latlng, locationid, name, count) {
+		var html = '';
+		html += '<div class="store-marker">';
+		html += '<div class="address-info"><table><tbody>';
+		html += '<tr><td colspan="4" align="left"><h4 data-id="'+ locationid +'">'+name+'</h4></td></tr>';
+		html += '<tr><td colspan="4" align="left" style="cursor:pointer;" onclick="jQuery(\'.my-instashow .content ul li:first-child a\').click();">'+ count  +' <?php echo __('photo(s) available') ?></td></tr>';
+		html += '</tbody></table></div>';
+		html += '</div>';
+
+		var marker = new google.maps.Marker({
+			map: map,
+			position: latlng,
+			icon: 'http://chart.apis.google.com/chart?chst=d_map_pin_letter_withshadow&chld=' + (count) + '|FF0000|0000FF' ,
+			locationid: locationid,
+			name: name,
+			count: count
+		});
+		var rqUrl = ajaxFindPost + '?locationid=' + marker.locationid;
+		google.maps.event.addListener(marker, 'click', function() {
+			infoWindow.setContent(html);
+			infoWindow.open(map, marker);
+			$.ajax({
+				url: rqUrl,
+                type: "GET",
+                cache: false,
+                dataType: "json",
+			}).done(function(response) {
+				$('#instagram_loadmore').hide();
+				generateListImage(response,0);
+			});
+			
+		});
+		markers.push(marker);
+	}
+	
+	function generateListImage(response,page){
+		var data_li = '';
+		$.each(response.media, function(n, item) {
+			var short_caption = item.title.length > maxLength ? item.title.substring(0, maxLength) + '...' : item.title;
+			var name = item.name ? item.name : '';
+			data_li += "<li><a href='"+item.display_url+"' data-location='"+  item.location_name + "' data-title='"+ toHtmlEntities(item.title) +"' data-like='"+ item.like_count +"' data-comment='"+ item.comment_count +"' data-upload='"+ item.is_upload +"' data-name='"+ name +"'><div class='caption'><div class='top'><span class=' f-left'><i class='porto-icon-heart-1'></i>"+ item.like_count +"</span><span class='f-right'><i class='porto-icon-chat '></i> "+ item.comment_count +"</span></div>"+ short_caption +"</div><img src='" + item.thumbnail_src + "'/></a></li>";
+			
+		});
+		if(page > 0){
+			$(".my-instashow .content ul").append(data_li);
+		}else{
+			$(".my-instashow .content").html('<ul>' + data_li + '</ul>');
+		}
+		if(response.load_more){
+			$('#instagram_loadmore').show();
+			$('#instagram_loadmore').removeClass('disable');
+		}else{
+			$('#instagram_loadmore').hide();
+			$('#instagram_loadmore').addClass('disable');
+		}
+		$("#instagram_loadmore").attr('data-page', page);
+		$('#instagram_loadmore').attr('data-location',response.location);
+		$('.my-instashow .content').magnificPopup({
+			delegate: 'a',
+			type: 'image',
+			tLoading: 'Loading image #%curr%...',
+			mainClass: 'mfp-img-mobile',
+			gallery: {
+				enabled: true,
+				navigateByImgClick: true,
+				preload: [0,1] // Will preload 0 - before current, and 1 after the current image
+			},
+			image: {
+				tError: 'The image could not be loaded.',
+				titleSrc: function(item) {
+					var html ="";
+					
+					if(item.el.attr('data-upload') == '1'){
+						html += '<p>'+ item.el.attr('data-name') +'</p>';
+					}else{
+						html += '<p><i class="porto-icon-heart-1"></i>'+ item.el.attr('data-like') +'&nbsp;&nbsp; <i class="porto-icon-chat"></i>'+ item.el.attr('data-comment') +' </p>';
+						
+					}
+					if(item.el.attr('data-location') != ""){
+						html += '<p>'+ item.el.attr('data-location') +'</p>';
+					}
+					html += item.el.attr('data-title');
+					return html;
+				}
+			}
+		}); 
+	}
+	
+});
+
+</script>
+<?php
+   endif;
+?>

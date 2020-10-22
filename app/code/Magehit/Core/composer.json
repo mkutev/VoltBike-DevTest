@@ -1,0 +1,20 @@
+{
+    "name": "magehit/core",
+    "description": "Magehit Core",
+    "require": {
+        "php": "~5.5.0|~5.6.0|~7.0.0"
+    },
+    "type": "magento2-module",
+	"license": [
+        "Commercial"
+    ],
+    "version": "1.0.1",
+	"authors": [
+		{
+		  "name": "Magehit",
+		  "email": "support@magehit.com",
+		  "homepage": "https://magehit.com/",
+		  "role": "Developer"
+		}
+	]
+}

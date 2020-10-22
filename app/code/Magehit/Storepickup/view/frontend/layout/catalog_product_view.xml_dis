@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+	<head>
+        <css src="Magehit_Storepickup::css/pickup-styles.css"/>
+    </head>
+    <body>
+        <referenceContainer name="product.info.type">
+           <block class="Magehit\Storepickup\Block\Linkstore" name="product.info.storepickup" template="Magehit_Storepickup::product/view/store.phtml" before="-" />              
+        </referenceContainer>
+    </body>
+</page>
