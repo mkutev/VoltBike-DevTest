@@ -12,6 +12,7 @@
                 <value id="usercentrics" type="host">*.usercentrics.eu</value>
                 <value id="fontawesome" type="host">*.fontawesome.com</value>
                 <value id="lightwidget" type="host">*.lightwidget.com</value>
+                <value id="youtube-img" type="host">*.ytimg.com</value>
             </values>
         </policy>
         <policy id="style-src">
@@ -39,9 +40,9 @@
                 <value id="twimg" type="host">*.twimg.com</value>
                 <value id="vimeocdn" type="host">*.vimeocdn.com</value>
                 <value id="youtube-img" type="host">*.ytimg.com</value>
-                <value id="data" type="host">'self' data:</value>
                 <value id="lightemporium" type="host">*.lightemporium.com</value>                
                 <value id="usercentrics" type="host">*.usercentrics.eu</value>
+                <value id="data" type="host">'self' data:</value>
             </values>
         </policy>
         <policy id="connect-src">
@@ -51,6 +52,7 @@
                 <value id="paypal" type="host">*.paypal.com</value>
                 <value id="twimg" type="host">*.twimg.com</value>
                 <value id="lightwidget" type="host">*.lightwidget.com</value>
+                <value id="youtube-img" type="host">*.ytimg.com</value>
             </values>
         </policy>
         <policy id="font-src">
