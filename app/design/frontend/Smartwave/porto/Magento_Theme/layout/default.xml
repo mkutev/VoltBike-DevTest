@@ -14,8 +14,10 @@
             </arguments>
         </referenceBlock>
         <referenceContainer name="footer" remove="true"/>
-        <referenceBlock name="report.bugs" remove="true"/>
+        <referenceBlock name="report.bugs" remove="false"/>
         <referenceBlock name="catalog.compare.sidebar" remove="true"/>
         <referenceBlock name="wishlist_sidebar" remove="true"/>
+	<referenceBlock name="store-language" remove="true"/>
+	<referenceBlock name="store.settings.currency" remove="true" />
     </body>
 </page>

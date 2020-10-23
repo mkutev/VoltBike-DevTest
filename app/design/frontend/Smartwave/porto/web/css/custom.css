@@ -1229,7 +1229,7 @@ body.boxed .page-wrapper {
     line-height: 50px;
 }
 .fotorama__stage {
-    border: 1px solid #ddd;
+    /* border: 1px solid #ddd; */
     border-radius: 7px;
     background: #fff;
     max-width: 100%;
